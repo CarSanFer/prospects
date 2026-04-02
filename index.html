@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Boavista 919 — BD Prospeção</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --ink:#0B0B08;--ink2:#1A1913;--ash:#5C5945;--mist:#8C8A72;
+  --sand:#C0BA9E;--cream:#EDE7D4;--parch:#F5F0E4;--white:#FDFAF3;
+  --gold:#9A7A2E;--gold2:#B89444;--gold3:#D4B05A;
+  --t1:#1F5C3A;--t1b:#E8F3EC;--t2:#1C4A6E;--t2b:#E6EFF5;
+  --t3:#6B4C1A;--t3b:#F5EFE3;
+  --rule:rgba(11,11,8,.07);
+  --apollo:#FF6B35;--clay:#5B4FE9;--vibe:#0EA5E9;
+  --danger:#C0392B;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--parch);color:var(--ink);min-height:100vh;}
+
+/* ── LOGIN ── */
+#login-screen{position:fixed;inset:0;background:var(--ink2);display:flex;align-items:center;justify-content:center;z-index:999;}
+#login-screen.hidden{display:none;}
+.login-box{background:var(--white);border:.5px solid var(--gold);border-radius:4px;padding:2.5rem;width:360px;}
+.login-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--mist);margin-bottom:.4rem;}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;margin-bottom:1.5rem;color:var(--ink2);}
+.login-title em{font-style:italic;color:var(--gold);}
+.lform-row{margin-bottom:.875rem;}
+.lform-row label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:.3rem;}
+.lform-row input{width:100%;font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 11px;border:.5px solid var(--rule);border-radius:2px;background:var(--parch);color:var(--ink);outline:none;}
+.lform-row input:focus{border-color:var(--sand);}
+.btn-login{width:100%;font-family:'DM Sans',sans-serif;font-size:12px;padding:9px;background:var(--gold);color:var(--white);border:none;border-radius:2px;cursor:pointer;margin-top:.5rem;letter-spacing:.04em;}
+.btn-login:hover{background:var(--gold2);}
+.login-err{font-size:11px;color:var(--danger);margin-top:.5rem;display:none;}
+
+/* ── HEADER ── */
+.page-head{background:var(--ink2);padding:1.25rem 2.5rem;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--gold);}
+.ph-left .ph-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(184,148,68,.5);margin-bottom:.3rem;}
+.ph-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:rgba(253,250,243,.9);}
+.ph-title em{font-style:italic;color:var(--gold3);}
+.ph-sub{font-size:10px;color:rgba(192,186,158,.3);margin-top:.15rem;}
+.ph-right{display:flex;align-items:center;gap:1.25rem;}
+.ph-stats{display:flex;gap:1.25rem;}
+.ph-stat{text-align:right;}
+.ph-stat-v{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:rgba(253,250,243,.8);line-height:1;}
+.ph-stat-l{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(192,186,158,.3);margin-top:2px;}
+.user-pill{font-size:10px;color:rgba(192,186,158,.5);border:.5px solid rgba(192,186,158,.15);border-radius:2px;padding:3px 10px;display:flex;align-items:center;gap:6px;}
+.btn-logout{font-size:9px;color:rgba(192,186,158,.3);background:none;border:none;cursor:pointer;letter-spacing:.08em;text-transform:uppercase;}
+.btn-logout:hover{color:var(--gold3);}
+
+/* ── TOOLBAR ── */
+.toolbar{background:var(--white);border-bottom:.5px solid var(--rule);padding:.65rem 2.5rem;display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;}
+.ctrl-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mist);flex-shrink:0;}
+.filters{display:flex;gap:3px;flex-wrap:wrap;}
+.fbtn{font-size:10px;letter-spacing:.04em;padding:3px 9px;border-radius:2px;border:.5px solid var(--rule);background:transparent;color:var(--ash);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;}
+.fbtn:hover{border-color:var(--sand);color:var(--ink);}
+.fbtn.on{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.sep{width:1px;height:16px;background:var(--rule);flex-shrink:0;}
+.search{font-family:'DM Sans',sans-serif;font-size:12px;padding:4px 9px;border:.5px solid var(--rule);border-radius:2px;background:var(--parch);color:var(--ink);width:170px;outline:none;}
+.search:focus{border-color:var(--sand);}
+.rc{font-size:10px;color:var(--mist);letter-spacing:.06em;white-space:nowrap;}
+.btn-novo{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:11px;padding:5px 13px;background:var(--gold);color:var(--white);border:none;border-radius:2px;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.btn-novo:hover{background:var(--gold2);}
+
+/* ── LOADING STATE ── */
+.app-loading{text-align:center;padding:4rem;color:var(--mist);}
+.app-loading .spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--sand);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:.75rem;}
+
+/* ── MAIN ── */
+.main{padding:1.25rem 2.5rem 3rem;}
+.seg-section{margin-bottom:1.5rem;}
+.seg-head{display:flex;align-items:center;gap:.65rem;margin-bottom:.65rem;padding-bottom:.35rem;border-bottom:.5px solid var(--rule);}
+.seg-badge{font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:2px 8px;border-radius:2px;border:.5px solid;}
+.sb-law{background:#EEF0F8;color:#2B3A8C;border-color:rgba(43,58,140,.2);}
+.sb-bank{background:var(--t1b);color:var(--t1);border-color:rgba(31,92,58,.2);}
+.sb-dipl{background:var(--t3b);color:var(--t3);border-color:rgba(107,76,26,.2);}
+.sb-art{background:#FDF3E7;color:#8C4A1A;border-color:rgba(140,74,26,.22);}
+.sb-fund{background:#F0EAF5;color:#5A2A7A;border-color:rgba(90,42,122,.2);}
+.sb-clin{background:#F5E8E8;color:#7A1A1A;border-color:rgba(122,26,26,.2);}
+.sb-big4{background:var(--t2b);color:var(--t2);border-color:rgba(28,74,110,.2);}
+.sb-cow{background:#E6F5EE;color:#145C2A;border-color:rgba(20,92,42,.2);}
+.seg-title{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:300;color:var(--ash);}
+.seg-cnt{font-size:10px;color:var(--mist);margin-left:auto;}
+
+/* ── TABLE ── */
+.tbl-wrap{background:var(--white);border:.5px solid var(--rule);border-radius:3px;overflow:hidden;}
+table{width:100%;border-collapse:collapse;font-size:11px;}
+thead th{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);padding:.45rem .7rem;text-align:left;background:var(--parch);border-bottom:.5px solid var(--rule);white-space:nowrap;}
+tbody tr{border-bottom:.5px solid rgba(11,11,8,.04);transition:background .12s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(240,236,220,.35);}
+tbody tr.hidden{display:none;}
+td{padding:.5rem .7rem;vertical-align:top;}
+td.num{color:var(--mist);font-size:10px;width:24px;text-align:center;vertical-align:middle;}
+td.org{font-weight:500;color:var(--ink);min-width:130px;}
+td.org .tipo{font-size:10px;font-weight:400;color:var(--mist);margin-top:1px;}
+td.decisor{min-width:120px;}
+td.decisor .cargo{font-size:10px;color:var(--ash);margin-top:1px;}
+td.email-cell{font-size:10px;color:var(--ash);max-width:160px;word-break:break-all;}
+td.tel{font-size:10px;color:var(--ash);white-space:nowrap;}
+td.nota{font-size:10px;color:var(--ash);line-height:1.5;max-width:200px;}
+.sc{font-size:9px;letter-spacing:.03em;padding:2px 5px;border-radius:2px;display:inline-block;white-space:nowrap;}
+.sc-buy{background:rgba(139,58,28,.07);color:#8B3A1C;border:.5px solid rgba(139,58,28,.2);}
+.sc-rent{background:rgba(28,74,110,.07);color:var(--t2);border:.5px solid rgba(28,74,110,.2);}
+.sc-both{background:rgba(154,122,46,.07);color:var(--gold);border:.5px solid rgba(154,122,46,.2);}
+
+/* ── ENRICH CELL ── */
+td.enrich{vertical-align:middle;min-width:170px;}
+.enrich-btns{display:flex;gap:3px;flex-wrap:wrap;margin-top:3px;}
+.ebtn{font-size:9px;padding:2px 6px;border-radius:2px;border:.5px solid;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
+.ebtn:disabled{opacity:.35;cursor:default;}
+.ebtn-apollo{background:rgba(255,107,53,.07);color:var(--apollo);border-color:rgba(255,107,53,.25);}
+.ebtn-apollo:hover:not(:disabled){background:rgba(255,107,53,.18);}
+.ebtn-clay{background:rgba(91,79,233,.07);color:var(--clay);border-color:rgba(91,79,233,.25);}
+.ebtn-clay:hover:not(:disabled){background:rgba(91,79,233,.18);}
+.ebtn-vibe{background:rgba(14,165,233,.07);color:var(--vibe);border-color:rgba(14,165,233,.25);}
+.ebtn-vibe:hover:not(:disabled){background:rgba(14,165,233,.18);}
+.enrich-badge{font-size:9px;padding:1px 5px;border-radius:2px;display:inline-flex;align-items:center;gap:2px;}
+.eb-ok{background:rgba(31,92,58,.08);color:var(--t1);border:.5px solid rgba(31,92,58,.2);}
+.eb-loading{animation:pulse 1s infinite;background:rgba(154,122,46,.07);color:var(--gold);border:.5px solid rgba(154,122,46,.2);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── MODALS ── */
+.overlay{position:fixed;inset:0;background:rgba(11,11,8,.55);z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+.overlay.hidden{display:none;}
+.modal{background:var(--white);border:.5px solid var(--sand);border-radius:4px;width:560px;max-width:96vw;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(11,11,8,.2);}
+.modal-head{padding:1.1rem 1.4rem;border-bottom:.5px solid var(--rule);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:1;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;}
+.modal-title em{font-style:italic;color:var(--gold);}
+.modal-close{background:none;border:none;cursor:pointer;color:var(--mist);font-size:17px;line-height:1;}
+.modal-body{padding:1.1rem 1.4rem;}
+.form-row{margin-bottom:.875rem;}
+.form-row label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:.3rem;}
+.form-row input,.form-row select,.form-row textarea{width:100%;font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 9px;border:.5px solid var(--rule);border-radius:2px;background:var(--parch);color:var(--ink);outline:none;transition:border .15s;}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--sand);}
+.form-row textarea{resize:vertical;min-height:55px;}
+.form-cols{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;}
+.modal-foot{padding:.875rem 1.4rem;border-top:.5px solid var(--rule);display:flex;justify-content:flex-end;gap:.5rem;position:sticky;bottom:0;background:var(--white);}
+.btn-cancel{font-family:'DM Sans',sans-serif;font-size:11px;padding:5px 13px;border:.5px solid var(--rule);border-radius:2px;background:transparent;color:var(--ash);cursor:pointer;}
+.btn-save{font-family:'DM Sans',sans-serif;font-size:11px;padding:5px 13px;background:var(--gold);color:var(--white);border:none;border-radius:2px;cursor:pointer;}
+.btn-save:hover{background:var(--gold2);}
+.btn-save:disabled{opacity:.5;cursor:default;}
+
+/* ── ENRICH MODAL ── */
+.enrich-modal{width:700px;}
+.source-block{margin-bottom:.875rem;}
+.source-header{display:flex;align-items:center;gap:.5rem;padding:.45rem .7rem;border-radius:2px;margin-bottom:.4rem;}
+.sh-apollo{background:rgba(255,107,53,.06);border:.5px solid rgba(255,107,53,.15);}
+.sh-clay{background:rgba(91,79,233,.06);border:.5px solid rgba(91,79,233,.15);}
+.sh-vibe{background:rgba(14,165,233,.06);border:.5px solid rgba(14,165,233,.15);}
+.source-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.sd-apollo{background:var(--apollo);}
+.sd-clay{background:var(--clay);}
+.sd-vibe{background:var(--vibe);}
+.source-name{font-size:11px;font-weight:500;}
+.source-status{margin-left:auto;font-size:10px;color:var(--mist);}
+.btn-fetch{font-family:'DM Sans',sans-serif;font-size:9px;padding:2px 7px;border-radius:2px;border:.5px solid;cursor:pointer;margin-left:.4rem;}
+.bf-apollo{color:var(--apollo);border-color:rgba(255,107,53,.25);background:transparent;}
+.bf-clay{color:var(--clay);border-color:rgba(91,79,233,.25);background:transparent;}
+.bf-vibe{color:var(--vibe);border-color:rgba(14,165,233,.25);background:transparent;}
+.contact-card{border:.5px solid var(--rule);border-radius:2px;padding:.55rem .75rem;margin-bottom:.3rem;display:flex;align-items:flex-start;gap:.65rem;background:var(--parch);}
+.contact-card:hover{background:var(--cream);}
+.cc-check{margin-top:2px;accent-color:var(--gold);width:13px;height:13px;flex-shrink:0;cursor:pointer;}
+.cc-info{flex:1;min-width:0;}
+.cc-name{font-size:12px;font-weight:500;}
+.cc-cargo{font-size:10px;color:var(--ash);margin-top:1px;}
+.cc-contact{font-size:10px;color:var(--mist);margin-top:2px;display:flex;gap:.5rem;flex-wrap:wrap;}
+.cc-src{font-size:9px;padding:1px 5px;border-radius:2px;}
+.src-apollo{background:rgba(255,107,53,.07);color:var(--apollo);border:.5px solid rgba(255,107,53,.2);}
+.src-clay{background:rgba(91,79,233,.07);color:var(--clay);border:.5px solid rgba(91,79,233,.2);}
+.src-vibe{background:rgba(14,165,233,.07);color:var(--vibe);border:.5px solid rgba(14,165,233,.2);}
+.enrich-loading{text-align:center;padding:1rem;color:var(--mist);font-size:11px;}
+.enrich-loading .spin{display:inline-block;width:13px;height:13px;border:1.5px solid var(--sand);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin-right:.4rem;vertical-align:middle;}
+.no-res{font-size:11px;color:var(--mist);font-style:italic;text-align:center;padding:.65rem;}
+.section-hr{border:none;border-top:.5px solid var(--rule);margin:.75rem 0;}
+.assoc-section{margin-bottom:.875rem;}
+.assoc-label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:.4rem;}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--ink2);color:var(--white);font-size:11px;padding:.65rem 1.1rem;border-radius:3px;border-left:3px solid var(--gold3);z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-eyebrow">Aceitar Sucessos · Boavista 919 · Off-Market</div>
+    <div class="login-title">BD <em>Prospeção</em></div>
+    <div class="lform-row">
+      <label>Email</label>
+      <input type="email" id="l-email" placeholder="carlos.ferreira@aceitar.pt" autocomplete="email">
+    </div>
+    <div class="lform-row">
+      <label>Password</label>
+      <input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn-login" id="btn-login" onclick="doLogin()">Entrar</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+
+  <!-- HEADER -->
+  <div class="page-head">
+    <div class="ph-left">
+      <div class="ph-eyebrow">Aceitar Sucessos · BlackOAK · Pedro Brás Marques · Boavista 919 · Off-Market</div>
+      <div class="ph-title">BD Prospeção <em>Alargada</em> — Contactos & Enriquecimento</div>
+      <div class="ph-sub">Confidencial · Uso interno exclusivo · 2026</div>
+    </div>
+    <div class="ph-right">
+      <div class="ph-stats">
+        <div class="ph-stat"><div class="ph-stat-v" id="stat-total">—</div><div class="ph-stat-l">Targets</div></div>
+        <div class="ph-stat"><div class="ph-stat-v" style="color:#4ade80;" id="stat-enrich">—</div><div class="ph-stat-l">Enriquecidos</div></div>
+        <div class="ph-stat"><div class="ph-stat-v" style="color:var(--gold3);" id="stat-contacts">—</div><div class="ph-stat-l">Contactos</div></div>
+      </div>
+      <div class="user-pill">
+        <span id="user-email-display">—</span>
+        <button class="btn-logout" onclick="doLogout()">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <span class="ctrl-label">Segmento</span>
+    <div class="filters" id="f-seg">
+      <button class="fbtn on" data-v="all">Todos</button>
+      <button class="fbtn" data-v="law">Advogados</button>
+      <button class="fbtn" data-v="big4">Big 4</button>
+      <button class="fbtn" data-v="bank">Bancos</button>
+      <button class="fbtn" data-v="dipl">Embaixadas</button>
+      <button class="fbtn" data-v="art">Arte</button>
+      <button class="fbtn" data-v="fund">Fundações</button>
+      <button class="fbtn" data-v="clin">Clínicas</button>
+      <button class="fbtn" data-v="cow">Coworking</button>
+    </div>
+    <div class="sep"></div>
+    <input class="search" id="search" placeholder="Pesquisar…" oninput="applyFilters()">
+    <span class="rc" id="rc">— de —</span>
+    <button class="btn-novo" onclick="openNovoModal()">＋ Novo Registo</button>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="main">
+    <div class="app-loading"><div class="spinner"></div><div>A carregar dados…</div></div>
+  </div>
+
+</div>
+
+<!-- MODAL NOVO REGISTO -->
+<div class="overlay hidden" id="ov-novo">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title">Novo Registo</span>
+      <button class="modal-close" onclick="closeOv('ov-novo')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-cols">
+        <div class="form-row"><label>Segmento</label>
+          <select id="n-seg">
+            <option value="law">Sociedades de Advogados</option>
+            <option value="big4">Big 4 / Consultoras</option>
+            <option value="bank">Bancos & Financeiras</option>
+            <option value="dipl">Embaixadas & Consulados</option>
+            <option value="art">Arte & Galerias</option>
+            <option value="fund">Fundações</option>
+            <option value="clin">Clínicas & Saúde</option>
+            <option value="cow">Coworking</option>
+          </select>
+        </div>
+        <div class="form-row"><label>Cenário</label>
+          <select id="n-sc">
+            <option value="Compra Arrend">Compra / Arrendamento</option>
+            <option value="Compra">Compra</option>
+            <option value="Arrend">Arrendamento</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row"><label>Organização *</label><input id="n-org" placeholder="Nome da empresa…"></div>
+      <div class="form-row"><label>Tipo / Subtítulo</label><input id="n-tipo" placeholder="Ex: Soc. Advogados Ibérica"></div>
+      <div class="form-row"><label>Domínio (para enriquecimento)</label><input id="n-domain" placeholder="Ex: cuatrecasas.com"></div>
+      <div class="form-cols">
+        <div class="form-row"><label>Decisor</label><input id="n-decisor" placeholder="Nome…"></div>
+        <div class="form-row"><label>Cargo</label><input id="n-cargo" placeholder="Ex: Managing Partner"></div>
+      </div>
+      <div class="form-cols">
+        <div class="form-row"><label>Email</label><input id="n-email" placeholder="email@empresa.com"></div>
+        <div class="form-row"><label>Telefone</label><input id="n-tel" placeholder="+351…"></div>
+      </div>
+      <div class="form-row"><label>Notas</label><textarea id="n-notas" placeholder="Contexto, notas de abordagem…"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeOv('ov-novo')">Cancelar</button>
+      <button class="btn-save" id="btn-save-novo" onclick="saveNovo()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ENRIQUECIMENTO -->
+<div class="overlay hidden" id="ov-enrich">
+  <div class="modal enrich-modal">
+    <div class="modal-head">
+      <span class="modal-title" id="enrich-title">Enriquecimento</span>
+      <button class="modal-close" onclick="closeOv('ov-enrich')">✕</button>
+    </div>
+    <div class="modal-body" id="enrich-body"></div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeOv('ov-enrich')">Fechar</button>
+      <button class="btn-save" onclick="associateSelected()">✓ Associar Selecionados</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+//  SUPABASE INIT
+// ══════════════════════════════════════════
+const SUPA_URL = 'https://cdjdjzckgbcgzkhcmxkb.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkamRqemNrZ2JjZ3praGNteGtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMzI0MzQsImV4cCI6MjA5MDcwODQzNH0.VpQ8_5I2hDc70sTiUZHC0pRrbmDQupYWy-jjLDDmiis';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let prospects = [];       // from supabase
+let contactsMap = {};     // prospect_id -> [contacts]
+let currentEnrichId = null;
+let pendingContacts = {}; // source -> [{...}]
+let activeSeg = 'all';
+let currentUser = null;
+
+// ══════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════
+async function doLogin(){
+  const email = document.getElementById('l-email').value.trim();
+  const pass  = document.getElementById('l-pass').value;
+  const errEl = document.getElementById('login-err');
+  const btn   = document.getElementById('btn-login');
+  errEl.style.display='none';
+  btn.textContent='A entrar…'; btn.disabled=true;
+  const {data,error} = await sb.auth.signInWithPassword({email,password:pass});
+  btn.textContent='Entrar'; btn.disabled=false;
+  if(error){ errEl.textContent=error.message; errEl.style.display='block'; return; }
+  currentUser = data.user;
+  showApp();
+}
+
+async function doLogout(){
+  await sb.auth.signOut();
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+  prospects=[]; contactsMap={};
+}
+
+async function checkSession(){
+  const {data:{session}} = await sb.auth.getSession();
+  if(session){ currentUser=session.user; showApp(); }
+}
+
+function showApp(){
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('user-email-display').textContent = currentUser?.email||'—';
+  loadAll();
+}
+
+// ══════════════════════════════════════════
+//  LOAD DATA FROM SUPABASE
+// ══════════════════════════════════════════
+async function loadAll(){
+  document.getElementById('main').innerHTML=
+    '<div class="app-loading"><div class="spinner"></div><div>A carregar dados…</div></div>';
+
+  const [{data:prData,error:prErr},{data:ctData,error:ctErr}] = await Promise.all([
+    sb.from('prospects').select('*').order('id'),
+    sb.from('prospect_contacts').select('*').eq('associated',true)
+  ]);
+
+  if(prErr){ document.getElementById('main').innerHTML=`<div class="app-loading" style="color:var(--danger)">Erro: ${prErr.message}</div>`; return; }
+
+  prospects = prData || [];
+  contactsMap = {};
+  (ctData||[]).forEach(c=>{
+    if(!contactsMap[c.prospect_id]) contactsMap[c.prospect_id]=[];
+    contactsMap[c.prospect_id].push(c);
+  });
+
+  render();
+}
+
+// ══════════════════════════════════════════
+//  SEGMENT CONFIG
+// ══════════════════════════════════════════
+const SEG_META = {
+  law: {label:'Sociedades de Advogados',badge:'sb-law'},
+  big4:{label:'Big 4 & Consultoras',   badge:'sb-big4'},
+  bank:{label:'Bancos & Financeiras',  badge:'sb-bank'},
+  dipl:{label:'Embaixadas & Consulados',badge:'sb-dipl'},
+  art: {label:'Arte & Galerias',        badge:'sb-art'},
+  fund:{label:'Fundações & Entidades', badge:'sb-fund'},
+  clin:{label:'Clínicas & Saúde',      badge:'sb-clin'},
+  cow: {label:'Coworking',             badge:'sb-cow'}
+};
+const SEG_ORDER=['law','big4','bank','dipl','art','fund','clin','cow'];
+
+// ══════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════
+function render(){
+  const segs=[...new Set(prospects.map(p=>p.seg))];
+  const ordered=SEG_ORDER.filter(s=>segs.includes(s)).concat(segs.filter(s=>!SEG_ORDER.includes(s)));
+
+  document.getElementById('main').innerHTML=ordered.map(seg=>{
+    const recs=prospects.filter(p=>p.seg===seg);
+    const meta=SEG_META[seg]||{label:seg,badge:'sb-law'};
+    return `
+    <div class="seg-section" id="sec-${seg}">
+      <div class="seg-head">
+        <span class="seg-badge ${meta.badge}">${meta.label}</span>
+        <span class="seg-cnt" id="cnt-${seg}">${recs.length} targets</span>
+      </div>
+      <div class="tbl-wrap"><table>
+        <thead><tr>
+          <th>#</th><th>Organização</th><th>Decisor</th>
+          <th>Email</th><th>Telefone</th><th>Cenário</th>
+          <th>Enriquecimento</th><th>Notas</th>
+        </tr></thead>
+        <tbody id="tbody-${seg}">
+          ${recs.map((r,i)=>renderRow(r,i+1)).join('')}
+        </tbody>
+      </table></div>
+    </div>`;
+  }).join('');
+
+  updateStats();
+  applyFilters();
+  bindFilters();
+}
+
+function renderRow(r, num){
+  const scCls = r.sc==='Compra'?'sc-buy':r.sc==='Arrend'?'sc-rent':'sc-both';
+  const scLbl = r.sc==='Compra Arrend'?'Compra / Arrend.':r.sc;
+  const cts   = contactsMap[r.id]||[];
+  const enriched = cts.length>0;
+  return `<tr data-seg="${r.seg}" data-sc="${r.sc||''}" data-id="${r.id}">
+    <td class="num">${num}</td>
+    <td class="org">${esc(r.org)}<div class="tipo">${esc(r.tipo||'')}</div></td>
+    <td class="decisor">${esc(r.decisor||'—')}<div class="cargo">${esc(r.cargo||'')}</div></td>
+    <td class="email-cell">${r.email?esc(r.email):'<span style="color:var(--mist)">—</span>'}</td>
+    <td class="tel">${esc(r.tel||'—')}</td>
+    <td><span class="sc ${scCls}">${scLbl}</span></td>
+    <td class="enrich">
+      ${enriched?`<span class="enrich-badge eb-ok">✓ ${cts.length} contacto${cts.length>1?'s':''}</span>`:''}
+      <div class="enrich-btns">
+        <button class="ebtn ebtn-apollo" onclick="openEnrich('${r.id}','apollo')">● Apollo</button>
+        <button class="ebtn ebtn-clay"   onclick="openEnrich('${r.id}','clay')">● Clay</button>
+        <button class="ebtn ebtn-vibe"   onclick="openEnrich('${r.id}','vibe')">● Vibe</button>
+      </div>
+    </td>
+    <td class="nota">${esc(r.nota||'')}</td>
+  </tr>`;
+}
+
+function updateStats(){
+  const total=prospects.length;
+  const enr=prospects.filter(p=>(contactsMap[p.id]||[]).length>0).length;
+  const cts=Object.values(contactsMap).flat().length;
+  document.getElementById('stat-total').textContent=total;
+  document.getElementById('stat-enrich').textContent=enr;
+  document.getElementById('stat-contacts').textContent=cts;
+}
+
+// ══════════════════════════════════════════
+//  FILTERS
+// ══════════════════════════════════════════
+function bindFilters(){
+  document.getElementById('f-seg').addEventListener('click',e=>{
+    const btn=e.target.closest('.fbtn');
+    if(!btn)return;
+    document.querySelectorAll('#f-seg .fbtn').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    activeSeg=btn.dataset.v;
+    applyFilters();
+  });
+}
+
+function applyFilters(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const rows=document.querySelectorAll('tbody tr[data-seg]');
+  let vis=0;
+  rows.forEach(tr=>{
+    const show=(activeSeg==='all'||tr.dataset.seg===activeSeg)&&(!q||tr.textContent.toLowerCase().includes(q));
+    tr.classList.toggle('hidden',!show);
+    if(show)vis++;
+  });
+  document.getElementById('rc').textContent=`${vis} de ${prospects.length}`;
+  document.querySelectorAll('.seg-section').forEach(sec=>{
+    const seg=sec.id.replace('sec-','');
+    const v=[...sec.querySelectorAll('tbody tr:not(.hidden)')].length;
+    const cnt=sec.querySelector('.seg-cnt');
+    if(cnt)cnt.textContent=`${v} targets`;
+    sec.style.display=(v===0&&q)?'none':'';
+  });
+}
+
+// ══════════════════════════════════════════
+//  NOVO REGISTO
+// ══════════════════════════════════════════
+function openNovoModal(){ document.getElementById('ov-novo').classList.remove('hidden'); }
+
+async function saveNovo(){
+  const org=document.getElementById('n-org').value.trim();
+  if(!org){toast('Organização é obrigatória.','err');return;}
+  const btn=document.getElementById('btn-save-novo');
+  btn.disabled=true; btn.textContent='A guardar…';
+
+  const payload={
+    seg: document.getElementById('n-seg').value,
+    sc:  document.getElementById('n-sc').value,
+    org, tipo: document.getElementById('n-tipo').value.trim(),
+    domain:   document.getElementById('n-domain').value.trim(),
+    decisor:  document.getElementById('n-decisor').value.trim(),
+    cargo:    document.getElementById('n-cargo').value.trim(),
+    email:    document.getElementById('n-email').value.trim(),
+    tel:      document.getElementById('n-tel').value.trim(),
+    nota:     document.getElementById('n-notas').value.trim(),
+    created_by: currentUser?.id
+  };
+
+  const {data,error}=await sb.from('prospects').insert(payload).select().single();
+  btn.disabled=false; btn.textContent='Guardar';
+  if(error){toast('Erro: '+error.message,'err');return;}
+  prospects.push(data);
+  closeOv('ov-novo');
+  ['n-org','n-tipo','n-domain','n-decisor','n-cargo','n-email','n-tel','n-notas'].forEach(id=>document.getElementById(id).value='');
+  render();
+  toast(`${org} adicionado com sucesso.`);
+}
+
+// ══════════════════════════════════════════
+//  ENRICH MODAL
+// ══════════════════════════════════════════
+function openEnrich(id, source){
+  currentEnrichId=id;
+  pendingContacts={};
+  const rec=prospects.find(p=>p.id===id);
+  if(!rec)return;
+  document.getElementById('enrich-title').innerHTML=`Enriquecimento — <em>${esc(rec.org)}</em>`;
+  buildEnrichBody(rec);
+  document.getElementById('ov-enrich').classList.remove('hidden');
+  fetchSource(rec, source);
+}
+
+function buildEnrichBody(rec){
+  const cts=contactsMap[rec.id]||[];
+  const assocHtml=cts.length>0?`
+    <div class="assoc-section">
+      <div class="assoc-label">Contactos já associados</div>
+      ${cts.map(c=>`
+        <div class="contact-card" style="opacity:.75;">
+          <div class="cc-info">
+            <div class="cc-name">${esc(c.name||'—')}</div>
+            <div class="cc-cargo">${esc(c.title||'')}</div>
+            <div class="cc-contact">
+              ${c.email?`<span>✉ ${esc(c.email)}</span>`:''}
+              ${c.phone?`<span>☏ ${esc(c.phone)}</span>`:''}
+              <span class="cc-src src-${c.source}">${c.source}</span>
+            </div>
+          </div>
+        </div>`).join('')}
+      <hr class="section-hr">
+    </div>`:'' ;
+
+  const sources=['apollo','clay','vibe'];
+  const labels={apollo:'Apollo.io',clay:'Clay',vibe:'Vibe Prospecting'};
+  document.getElementById('enrich-body').innerHTML=assocHtml+sources.map(src=>`
+    <div class="source-block">
+      <div class="source-header sh-${src}">
+        <span class="source-dot sd-${src}"></span>
+        <span class="source-name">${labels[src]}</span>
+        <span class="source-status" id="st-${src}">—</span>
+        <button class="btn-fetch bf-${src}" onclick="fetchSource(prospects.find(p=>p.id==='${rec.id}'),'${src}')">↻ Pesquisar</button>
+      </div>
+      <div id="res-${src}"></div>
+    </div>
+    ${src!=='vibe'?'<hr class="section-hr">':''}`).join('');
+}
+
+async function fetchSource(rec, source){
+  const stEl=document.getElementById(`st-${source}`);
+  const resEl=document.getElementById(`res-${source}`);
+  if(!stEl||!resEl)return;
+  stEl.textContent='A pesquisar…';
+  resEl.innerHTML=`<div class="enrich-loading"><span class="spin"></span>A pesquisar em ${source}…</div>`;
+  try{
+    let contacts=[];
+    if(source==='apollo') contacts=await queryApollo(rec);
+    else if(source==='clay') contacts=await queryClay(rec);
+    else if(source==='vibe') contacts=await queryVibe(rec);
+    pendingContacts[source]=contacts;
+    renderResults(source, contacts);
+    stEl.textContent=contacts.length>0?`${contacts.length} encontrado${contacts.length>1?'s':''}`:'Sem resultados';
+  }catch(e){
+    resEl.innerHTML=`<div class="no-res">Erro: ${esc(e.message)}</div>`;
+    stEl.textContent='Erro';
+  }
+}
+
+function renderResults(source, contacts){
+  const el=document.getElementById(`res-${source}`);
+  if(!el)return;
+  if(!contacts||contacts.length===0){el.innerHTML='<div class="no-res">Nenhum contacto encontrado.</div>';return;}
+  el.innerHTML=contacts.map((c,i)=>`
+    <div class="contact-card">
+      <input type="checkbox" class="cc-check" id="ck-${source}-${i}" data-source="${source}" data-idx="${i}">
+      <label for="ck-${source}-${i}" class="cc-info" style="cursor:pointer;">
+        <div class="cc-name">${esc(c.name||'—')}</div>
+        <div class="cc-cargo">${esc(c.title||'')}</div>
+        <div class="cc-contact">
+          ${c.email?`<span>✉ ${esc(c.email)}</span>`:''}
+          ${c.phone?`<span>☏ ${esc(c.phone)}</span>`:''}
+          ${c.linkedin?`<span>🔗 LinkedIn</span>`:''}
+        </div>
+      </label>
+    </div>`).join('');
+}
+
+async function associateSelected(){
+  const rec=prospects.find(p=>p.id===currentEnrichId);
+  if(!rec)return;
+  const toInsert=[];
+  Object.entries(pendingContacts).forEach(([source,contacts])=>{
+    (contacts||[]).forEach((c,i)=>{
+      const cb=document.getElementById(`ck-${source}-${i}`);
+      if(cb?.checked) toInsert.push({
+        prospect_id: rec.id, source,
+        name: c.name||'', title: c.title||'',
+        email: c.email||'', phone: c.phone||'',
+        linkedin_url: c.linkedin||'', associated: true
+      });
+    });
+  });
+  if(toInsert.length===0){toast('Nenhum contacto selecionado.','err');return;}
+  const {data,error}=await sb.from('prospect_contacts').insert(toInsert).select();
+  if(error){toast('Erro: '+error.message,'err');return;}
+  if(!contactsMap[rec.id]) contactsMap[rec.id]=[];
+  contactsMap[rec.id].push(...(data||[]));
+  closeOv('ov-enrich');
+  render();
+  toast(`${toInsert.length} contacto${toInsert.length>1?'s':''} associado${toInsert.length>1?'s':''} a ${rec.org}.`);
+}
+
+// ══════════════════════════════════════════
+//  API CALLS VIA ANTHROPIC MCP
+// ══════════════════════════════════════════
+async function callMCP(mcp_server_url, mcp_server_name, prompt){
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1000,
+      mcp_servers:[{type:'url',url:mcp_server_url,name:mcp_server_name}],
+      system:'You are a contact research assistant. Use the available MCP tools to search for business contacts. Return ONLY a valid JSON array, no markdown, no explanation.',
+      messages:[{role:'user',content:prompt}]
+    })
+  });
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data=await res.json();
+  if(data.error) throw new Error(data.error.message||'API error');
+  const text=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+  return parseJSON(text);
+}
+
+async function queryApollo(rec){
+  return callMCP(
+    'https://mcp.apollo.io/mcp','apollo',
+    `Search Apollo.io for contacts at company "${rec.org}" with domain "${rec.domain||''}". Return up to 8 senior contacts (C-suite, Partners, Directors) as a JSON array with fields: name, title, email, phone, linkedin.`
+  );
+}
+
+async function queryClay(rec){
+  return callMCP(
+    'https://api.clay.com/v3/mcp','clay',
+    `Find contacts at "${rec.org}" (domain: "${rec.domain||''}") using Clay. Return up to 8 decision-makers as a JSON array with fields: name, title, email, phone, linkedin.`
+  );
+}
+
+async function queryVibe(rec){
+  return callMCP(
+    'https://vibeprospecting.explorium.ai/mcp','vibe',
+    `Search Vibe Prospecting for contacts at "${rec.org}" (domain: "${rec.domain||''}"). Return up to 8 senior contacts as a JSON array with fields: name, title, email, phone, linkedin.`
+  );
+}
+
+function parseJSON(text){
+  try{
+    const clean=text.replace(/```json|```/g,'').trim();
+    const match=clean.match(/\[[\s\S]*\]/);
+    if(match){
+      return JSON.parse(match[0]).map(c=>({
+        name:    c.name||c.full_name||'',
+        title:   c.title||c.job_title||c.position||'',
+        email:   c.email||c.email_address||'',
+        phone:   c.phone||c.phone_number||c.direct_phone||'',
+        linkedin:c.linkedin_url||c.linkedin||''
+      })).filter(c=>c.name);
+    }
+  }catch(e){console.warn('parse',e);}
+  return [];
+}
+
+// ══════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function closeOv(id){document.getElementById(id).classList.add('hidden');}
+function overlayClick(e,id){if(e.target.id===id)closeOv(id);}
+
+function toast(msg,type){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.style.borderLeftColor=type==='err'?'#e74c3c':'var(--gold3)';
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+// close on overlay click
+['ov-novo','ov-enrich'].forEach(id=>{
+  document.getElementById(id).addEventListener('mousedown',e=>{
+    if(e.target.id===id) closeOv(id);
+  });
+});
+
+// enter no login
+document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+checkSession();
+</script>
+</body>
+</html>
