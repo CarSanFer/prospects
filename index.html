@@ -37,7 +37,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--parch);color:var(--ink);m
 
 /* ── HEADER ── */
 .page-head{background:var(--ink2);padding:1.25rem 2.5rem;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--gold);}
-.ph-left .ph-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(184,148,68,.5);margin-bottom:.3rem;}
+.ph-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(184,148,68,.5);margin-bottom:.3rem;}
 .ph-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:rgba(253,250,243,.9);}
 .ph-title em{font-style:italic;color:var(--gold3);}
 .ph-sub{font-size:10px;color:rgba(192,186,158,.3);margin-top:.15rem;}
@@ -64,9 +64,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--parch);color:var(--ink);m
 .btn-novo{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:11px;padding:5px 13px;background:var(--gold);color:var(--white);border:none;border-radius:2px;cursor:pointer;display:flex;align-items:center;gap:5px;}
 .btn-novo:hover{background:var(--gold2);}
 
-/* ── LOADING STATE ── */
+/* ── LOADING ── */
 .app-loading{text-align:center;padding:4rem;color:var(--mist);}
 .app-loading .spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--sand);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:.75rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 
 /* ── MAIN ── */
 .main{padding:1.25rem 2.5rem 3rem;}
@@ -101,7 +103,7 @@ td.decisor .cargo{font-size:10px;color:var(--ash);margin-top:1px;}
 td.email-cell{font-size:10px;color:var(--ash);max-width:160px;word-break:break-all;}
 td.tel{font-size:10px;color:var(--ash);white-space:nowrap;}
 td.nota{font-size:10px;color:var(--ash);line-height:1.5;max-width:200px;}
-.sc{font-size:9px;letter-spacing:.03em;padding:2px 5px;border-radius:2px;display:inline-block;white-space:nowrap;}
+.sc{font-size:9px;padding:2px 5px;border-radius:2px;display:inline-block;white-space:nowrap;}
 .sc-buy{background:rgba(139,58,28,.07);color:#8B3A1C;border:.5px solid rgba(139,58,28,.2);}
 .sc-rent{background:rgba(28,74,110,.07);color:var(--t2);border:.5px solid rgba(28,74,110,.2);}
 .sc-both{background:rgba(154,122,46,.07);color:var(--gold);border:.5px solid rgba(154,122,46,.2);}
@@ -110,18 +112,14 @@ td.nota{font-size:10px;color:var(--ash);line-height:1.5;max-width:200px;}
 td.enrich{vertical-align:middle;min-width:170px;}
 .enrich-btns{display:flex;gap:3px;flex-wrap:wrap;margin-top:3px;}
 .ebtn{font-size:9px;padding:2px 6px;border-radius:2px;border:.5px solid;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
-.ebtn:disabled{opacity:.35;cursor:default;}
 .ebtn-apollo{background:rgba(255,107,53,.07);color:var(--apollo);border-color:rgba(255,107,53,.25);}
-.ebtn-apollo:hover:not(:disabled){background:rgba(255,107,53,.18);}
+.ebtn-apollo:hover{background:rgba(255,107,53,.18);}
 .ebtn-clay{background:rgba(91,79,233,.07);color:var(--clay);border-color:rgba(91,79,233,.25);}
-.ebtn-clay:hover:not(:disabled){background:rgba(91,79,233,.18);}
+.ebtn-clay:hover{background:rgba(91,79,233,.18);}
 .ebtn-vibe{background:rgba(14,165,233,.07);color:var(--vibe);border-color:rgba(14,165,233,.25);}
-.ebtn-vibe:hover:not(:disabled){background:rgba(14,165,233,.18);}
+.ebtn-vibe:hover{background:rgba(14,165,233,.18);}
 .enrich-badge{font-size:9px;padding:1px 5px;border-radius:2px;display:inline-flex;align-items:center;gap:2px;}
 .eb-ok{background:rgba(31,92,58,.08);color:var(--t1);border:.5px solid rgba(31,92,58,.2);}
-.eb-loading{animation:pulse 1s infinite;background:rgba(154,122,46,.07);color:var(--gold);border:.5px solid rgba(154,122,46,.2);}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-@keyframes spin{to{transform:rotate(360deg);}}
 
 /* ── MODALS ── */
 .overlay{position:fixed;inset:0;background:rgba(11,11,8,.55);z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
@@ -146,8 +144,8 @@ td.enrich{vertical-align:middle;min-width:170px;}
 
 /* ── ENRICH MODAL ── */
 .enrich-modal{width:700px;}
-.source-block{margin-bottom:.875rem;}
-.source-header{display:flex;align-items:center;gap:.5rem;padding:.45rem .7rem;border-radius:2px;margin-bottom:.4rem;}
+.source-block{margin-bottom:.75rem;}
+.source-header{display:flex;align-items:center;gap:.5rem;padding:.4rem .65rem;border-radius:2px;margin-bottom:.35rem;}
 .sh-apollo{background:rgba(255,107,53,.06);border:.5px solid rgba(255,107,53,.15);}
 .sh-clay{background:rgba(91,79,233,.06);border:.5px solid rgba(91,79,233,.15);}
 .sh-vibe{background:rgba(14,165,233,.06);border:.5px solid rgba(14,165,233,.15);}
@@ -157,11 +155,11 @@ td.enrich{vertical-align:middle;min-width:170px;}
 .sd-vibe{background:var(--vibe);}
 .source-name{font-size:11px;font-weight:500;}
 .source-status{margin-left:auto;font-size:10px;color:var(--mist);}
-.btn-fetch{font-family:'DM Sans',sans-serif;font-size:9px;padding:2px 7px;border-radius:2px;border:.5px solid;cursor:pointer;margin-left:.4rem;}
-.bf-apollo{color:var(--apollo);border-color:rgba(255,107,53,.25);background:transparent;}
-.bf-clay{color:var(--clay);border-color:rgba(91,79,233,.25);background:transparent;}
-.bf-vibe{color:var(--vibe);border-color:rgba(14,165,233,.25);background:transparent;}
-.contact-card{border:.5px solid var(--rule);border-radius:2px;padding:.55rem .75rem;margin-bottom:.3rem;display:flex;align-items:flex-start;gap:.65rem;background:var(--parch);}
+.btn-fetch{font-family:'DM Sans',sans-serif;font-size:9px;padding:2px 7px;border-radius:2px;border:.5px solid;cursor:pointer;margin-left:.4rem;background:transparent;}
+.bf-apollo{color:var(--apollo);border-color:rgba(255,107,53,.3);}
+.bf-clay{color:var(--clay);border-color:rgba(91,79,233,.3);}
+.bf-vibe{color:var(--vibe);border-color:rgba(14,165,233,.3);}
+.contact-card{border:.5px solid var(--rule);border-radius:2px;padding:.5rem .7rem;margin-bottom:.3rem;display:flex;align-items:flex-start;gap:.6rem;background:var(--parch);}
 .contact-card:hover{background:var(--cream);}
 .cc-check{margin-top:2px;accent-color:var(--gold);width:13px;height:13px;flex-shrink:0;cursor:pointer;}
 .cc-info{flex:1;min-width:0;}
@@ -172,12 +170,13 @@ td.enrich{vertical-align:middle;min-width:170px;}
 .src-apollo{background:rgba(255,107,53,.07);color:var(--apollo);border:.5px solid rgba(255,107,53,.2);}
 .src-clay{background:rgba(91,79,233,.07);color:var(--clay);border:.5px solid rgba(91,79,233,.2);}
 .src-vibe{background:rgba(14,165,233,.07);color:var(--vibe);border:.5px solid rgba(14,165,233,.2);}
-.enrich-loading{text-align:center;padding:1rem;color:var(--mist);font-size:11px;}
-.enrich-loading .spin{display:inline-block;width:13px;height:13px;border:1.5px solid var(--sand);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin-right:.4rem;vertical-align:middle;}
-.no-res{font-size:11px;color:var(--mist);font-style:italic;text-align:center;padding:.65rem;}
-.section-hr{border:none;border-top:.5px solid var(--rule);margin:.75rem 0;}
-.assoc-section{margin-bottom:.875rem;}
-.assoc-label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:.4rem;}
+.enrich-loading{text-align:center;padding:.875rem;color:var(--mist);font-size:11px;}
+.enrich-loading .spin{display:inline-block;width:12px;height:12px;border:1.5px solid var(--sand);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin-right:.35rem;vertical-align:middle;}
+.no-res{font-size:11px;color:var(--mist);font-style:italic;text-align:center;padding:.6rem;}
+.section-hr{border:none;border-top:.5px solid var(--rule);margin:.65rem 0;}
+.assoc-label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:.35rem;}
+
+/* ── TOAST ── */
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--ink2);color:var(--white);font-size:11px;padding:.65rem 1.1rem;border-radius:3px;border-left:3px solid var(--gold3);z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;}
 .toast.show{opacity:1;}
 </style>
@@ -189,12 +188,10 @@ td.enrich{vertical-align:middle;min-width:170px;}
   <div class="login-box">
     <div class="login-eyebrow">Aceitar Sucessos · Boavista 919 · Off-Market</div>
     <div class="login-title">BD <em>Prospeção</em></div>
-    <div class="lform-row">
-      <label>Email</label>
+    <div class="lform-row"><label>Email</label>
       <input type="email" id="l-email" placeholder="carlos.ferreira@aceitar.pt" autocomplete="email">
     </div>
-    <div class="lform-row">
-      <label>Password</label>
+    <div class="lform-row"><label>Password</label>
       <input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password">
     </div>
     <button class="btn-login" id="btn-login" onclick="doLogin()">Entrar</button>
@@ -204,10 +201,8 @@ td.enrich{vertical-align:middle;min-width:170px;}
 
 <!-- APP -->
 <div id="app" class="hidden">
-
-  <!-- HEADER -->
   <div class="page-head">
-    <div class="ph-left">
+    <div>
       <div class="ph-eyebrow">Aceitar Sucessos · BlackOAK · Pedro Brás Marques · Boavista 919 · Off-Market</div>
       <div class="ph-title">BD Prospeção <em>Alargada</em> — Contactos & Enriquecimento</div>
       <div class="ph-sub">Confidencial · Uso interno exclusivo · 2026</div>
@@ -225,7 +220,6 @@ td.enrich{vertical-align:middle;min-width:170px;}
     </div>
   </div>
 
-  <!-- TOOLBAR -->
   <div class="toolbar">
     <span class="ctrl-label">Segmento</span>
     <div class="filters" id="f-seg">
@@ -245,11 +239,9 @@ td.enrich{vertical-align:middle;min-width:170px;}
     <button class="btn-novo" onclick="openNovoModal()">＋ Novo Registo</button>
   </div>
 
-  <!-- MAIN -->
   <div class="main" id="main">
     <div class="app-loading"><div class="spinner"></div><div>A carregar dados…</div></div>
   </div>
-
 </div>
 
 <!-- MODAL NOVO REGISTO -->
@@ -316,90 +308,22 @@ td.enrich{vertical-align:middle;min-width:170px;}
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════
-//  SUPABASE INIT
-// ══════════════════════════════════════════
+// ── SUPABASE ──
 const SUPA_URL = 'https://cdjdjzckgbcgzkhcmxkb.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkamRqemNrZ2JjZ3praGNteGtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMzI0MzQsImV4cCI6MjA5MDcwODQzNH0.VpQ8_5I2hDc70sTiUZHC0pRrbmDQupYWy-jjLDDmiis';
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-// ══════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════
-let prospects = [];       // from supabase
-let contactsMap = {};     // prospect_id -> [contacts]
+// ── STATE ──
+let prospects = [];
+let contactsMap = {};
 let currentEnrichId = null;
-let pendingContacts = {}; // source -> [{...}]
+let pendingContacts = {};
 let activeSeg = 'all';
 let currentUser = null;
 
-// ══════════════════════════════════════════
-//  AUTH
-// ══════════════════════════════════════════
-async function doLogin(){
-  const email = document.getElementById('l-email').value.trim();
-  const pass  = document.getElementById('l-pass').value;
-  const errEl = document.getElementById('login-err');
-  const btn   = document.getElementById('btn-login');
-  errEl.style.display='none';
-  btn.textContent='A entrar…'; btn.disabled=true;
-  const {data,error} = await sb.auth.signInWithPassword({email,password:pass});
-  btn.textContent='Entrar'; btn.disabled=false;
-  if(error){ errEl.textContent=error.message; errEl.style.display='block'; return; }
-  currentUser = data.user;
-  showApp();
-}
-
-async function doLogout(){
-  await sb.auth.signOut();
-  document.getElementById('app').classList.add('hidden');
-  document.getElementById('login-screen').classList.remove('hidden');
-  prospects=[]; contactsMap={};
-}
-
-async function checkSession(){
-  const {data:{session}} = await sb.auth.getSession();
-  if(session){ currentUser=session.user; showApp(); }
-}
-
-function showApp(){
-  document.getElementById('login-screen').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-  document.getElementById('user-email-display').textContent = currentUser?.email||'—';
-  loadAll();
-}
-
-// ══════════════════════════════════════════
-//  LOAD DATA FROM SUPABASE
-// ══════════════════════════════════════════
-async function loadAll(){
-  document.getElementById('main').innerHTML=
-    '<div class="app-loading"><div class="spinner"></div><div>A carregar dados…</div></div>';
-
-  const [{data:prData,error:prErr},{data:ctData,error:ctErr}] = await Promise.all([
-    sb.from('prospects').select('*').order('id'),
-    sb.from('prospect_contacts').select('*').eq('associated',true)
-  ]);
-
-  if(prErr){ document.getElementById('main').innerHTML=`<div class="app-loading" style="color:var(--danger)">Erro: ${prErr.message}</div>`; return; }
-
-  prospects = prData || [];
-  contactsMap = {};
-  (ctData||[]).forEach(c=>{
-    if(!contactsMap[c.prospect_id]) contactsMap[c.prospect_id]=[];
-    contactsMap[c.prospect_id].push(c);
-  });
-
-  render();
-}
-
-// ══════════════════════════════════════════
-//  SEGMENT CONFIG
-// ══════════════════════════════════════════
 const SEG_META = {
   law: {label:'Sociedades de Advogados',badge:'sb-law'},
   big4:{label:'Big 4 & Consultoras',   badge:'sb-big4'},
@@ -410,37 +334,78 @@ const SEG_META = {
   clin:{label:'Clínicas & Saúde',      badge:'sb-clin'},
   cow: {label:'Coworking',             badge:'sb-cow'}
 };
-const SEG_ORDER=['law','big4','bank','dipl','art','fund','clin','cow'];
+const SEG_ORDER = ['law','big4','bank','dipl','art','fund','clin','cow'];
 
-// ══════════════════════════════════════════
-//  RENDER
-// ══════════════════════════════════════════
+// ── AUTH ──
+async function doLogin(){
+  const email = document.getElementById('l-email').value.trim();
+  const pass  = document.getElementById('l-pass').value;
+  const errEl = document.getElementById('login-err');
+  const btn   = document.getElementById('btn-login');
+  errEl.style.display = 'none';
+  btn.textContent = 'A entrar…'; btn.disabled = true;
+  const {data, error} = await sb.auth.signInWithPassword({email, password: pass});
+  btn.textContent = 'Entrar'; btn.disabled = false;
+  if(error){ errEl.textContent = error.message; errEl.style.display = 'block'; return; }
+  currentUser = data.user;
+  showApp();
+}
+
+async function doLogout(){
+  await sb.auth.signOut();
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+  prospects = []; contactsMap = {};
+}
+
+async function checkSession(){
+  const {data:{session}} = await sb.auth.getSession();
+  if(session){ currentUser = session.user; showApp(); }
+}
+
+function showApp(){
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('user-email-display').textContent = currentUser?.email || '—';
+  loadAll();
+}
+
+// ── DATA ──
+async function loadAll(){
+  document.getElementById('main').innerHTML =
+    '<div class="app-loading"><div class="spinner"></div><div>A carregar dados…</div></div>';
+  const [{data:prData,error:prErr},{data:ctData}] = await Promise.all([
+    sb.from('prospects').select('*').order('created_at'),
+    sb.from('prospect_contacts').select('*').eq('associated', true)
+  ]);
+  if(prErr){ document.getElementById('main').innerHTML = `<div class="app-loading" style="color:var(--danger)">Erro: ${prErr.message}</div>`; return; }
+  prospects = prData || [];
+  contactsMap = {};
+  (ctData||[]).forEach(c => {
+    if(!contactsMap[c.prospect_id]) contactsMap[c.prospect_id] = [];
+    contactsMap[c.prospect_id].push(c);
+  });
+  render();
+}
+
+// ── RENDER ──
 function render(){
-  const segs=[...new Set(prospects.map(p=>p.seg))];
-  const ordered=SEG_ORDER.filter(s=>segs.includes(s)).concat(segs.filter(s=>!SEG_ORDER.includes(s)));
-
-  document.getElementById('main').innerHTML=ordered.map(seg=>{
-    const recs=prospects.filter(p=>p.seg===seg);
-    const meta=SEG_META[seg]||{label:seg,badge:'sb-law'};
-    return `
-    <div class="seg-section" id="sec-${seg}">
+  const segs = [...new Set(prospects.map(p => p.seg))];
+  const ordered = SEG_ORDER.filter(s => segs.includes(s)).concat(segs.filter(s => !SEG_ORDER.includes(s)));
+  document.getElementById('main').innerHTML = ordered.map(seg => {
+    const recs = prospects.filter(p => p.seg === seg);
+    const meta = SEG_META[seg] || {label: seg, badge: 'sb-law'};
+    return `<div class="seg-section" id="sec-${seg}">
       <div class="seg-head">
         <span class="seg-badge ${meta.badge}">${meta.label}</span>
         <span class="seg-cnt" id="cnt-${seg}">${recs.length} targets</span>
       </div>
       <div class="tbl-wrap"><table>
-        <thead><tr>
-          <th>#</th><th>Organização</th><th>Decisor</th>
-          <th>Email</th><th>Telefone</th><th>Cenário</th>
-          <th>Enriquecimento</th><th>Notas</th>
-        </tr></thead>
-        <tbody id="tbody-${seg}">
-          ${recs.map((r,i)=>renderRow(r,i+1)).join('')}
-        </tbody>
+        <thead><tr><th>#</th><th>Organização</th><th>Decisor</th><th>Email</th><th>Telefone</th><th>Cenário</th><th>Enriquecimento</th><th>Notas</th></tr></thead>
+        <tbody>${recs.map((r,i) => renderRow(r, i+1)).join('')}</tbody>
       </table></div>
     </div>`;
   }).join('');
-
   updateStats();
   applyFilters();
   bindFilters();
@@ -449,17 +414,16 @@ function render(){
 function renderRow(r, num){
   const scCls = r.sc==='Compra'?'sc-buy':r.sc==='Arrend'?'sc-rent':'sc-both';
   const scLbl = r.sc==='Compra Arrend'?'Compra / Arrend.':r.sc;
-  const cts   = contactsMap[r.id]||[];
-  const enriched = cts.length>0;
+  const cts   = contactsMap[r.id] || [];
   return `<tr data-seg="${r.seg}" data-sc="${r.sc||''}" data-id="${r.id}">
     <td class="num">${num}</td>
     <td class="org">${esc(r.org)}<div class="tipo">${esc(r.tipo||'')}</div></td>
     <td class="decisor">${esc(r.decisor||'—')}<div class="cargo">${esc(r.cargo||'')}</div></td>
-    <td class="email-cell">${r.email?esc(r.email):'<span style="color:var(--mist)">—</span>'}</td>
+    <td class="email-cell">${r.email ? esc(r.email) : '<span style="color:var(--mist)">—</span>'}</td>
     <td class="tel">${esc(r.tel||'—')}</td>
     <td><span class="sc ${scCls}">${scLbl}</span></td>
     <td class="enrich">
-      ${enriched?`<span class="enrich-badge eb-ok">✓ ${cts.length} contacto${cts.length>1?'s':''}</span>`:''}
+      ${cts.length > 0 ? `<span class="enrich-badge eb-ok">✓ ${cts.length} contacto${cts.length>1?'s':''}</span>` : ''}
       <div class="enrich-btns">
         <button class="ebtn ebtn-apollo" onclick="openEnrich('${r.id}','apollo')">● Apollo</button>
         <button class="ebtn ebtn-clay"   onclick="openEnrich('${r.id}','clay')">● Clay</button>
@@ -471,62 +435,54 @@ function renderRow(r, num){
 }
 
 function updateStats(){
-  const total=prospects.length;
-  const enr=prospects.filter(p=>(contactsMap[p.id]||[]).length>0).length;
-  const cts=Object.values(contactsMap).flat().length;
-  document.getElementById('stat-total').textContent=total;
-  document.getElementById('stat-enrich').textContent=enr;
-  document.getElementById('stat-contacts').textContent=cts;
+  document.getElementById('stat-total').textContent    = prospects.length;
+  document.getElementById('stat-enrich').textContent   = prospects.filter(p => (contactsMap[p.id]||[]).length > 0).length;
+  document.getElementById('stat-contacts').textContent = Object.values(contactsMap).flat().length;
 }
 
-// ══════════════════════════════════════════
-//  FILTERS
-// ══════════════════════════════════════════
+// ── FILTERS ──
 function bindFilters(){
-  document.getElementById('f-seg').addEventListener('click',e=>{
-    const btn=e.target.closest('.fbtn');
-    if(!btn)return;
-    document.querySelectorAll('#f-seg .fbtn').forEach(b=>b.classList.remove('on'));
+  const fseg = document.getElementById('f-seg');
+  fseg.onclick = e => {
+    const btn = e.target.closest('.fbtn');
+    if(!btn) return;
+    fseg.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
     btn.classList.add('on');
-    activeSeg=btn.dataset.v;
+    activeSeg = btn.dataset.v;
     applyFilters();
-  });
+  };
 }
 
 function applyFilters(){
-  const q=document.getElementById('search').value.toLowerCase();
-  const rows=document.querySelectorAll('tbody tr[data-seg]');
-  let vis=0;
-  rows.forEach(tr=>{
-    const show=(activeSeg==='all'||tr.dataset.seg===activeSeg)&&(!q||tr.textContent.toLowerCase().includes(q));
-    tr.classList.toggle('hidden',!show);
-    if(show)vis++;
+  const q = document.getElementById('search').value.toLowerCase();
+  const rows = document.querySelectorAll('tbody tr[data-seg]');
+  let vis = 0;
+  rows.forEach(tr => {
+    const show = (activeSeg==='all' || tr.dataset.seg===activeSeg) && (!q || tr.textContent.toLowerCase().includes(q));
+    tr.classList.toggle('hidden', !show);
+    if(show) vis++;
   });
-  document.getElementById('rc').textContent=`${vis} de ${prospects.length}`;
-  document.querySelectorAll('.seg-section').forEach(sec=>{
-    const seg=sec.id.replace('sec-','');
-    const v=[...sec.querySelectorAll('tbody tr:not(.hidden)')].length;
-    const cnt=sec.querySelector('.seg-cnt');
-    if(cnt)cnt.textContent=`${v} targets`;
-    sec.style.display=(v===0&&q)?'none':'';
+  document.getElementById('rc').textContent = `${vis} de ${prospects.length}`;
+  document.querySelectorAll('.seg-section').forEach(sec => {
+    const v = [...sec.querySelectorAll('tbody tr:not(.hidden)')].length;
+    const cnt = sec.querySelector('.seg-cnt');
+    if(cnt) cnt.textContent = `${v} targets`;
+    sec.style.display = (v===0 && q) ? 'none' : '';
   });
 }
 
-// ══════════════════════════════════════════
-//  NOVO REGISTO
-// ══════════════════════════════════════════
+// ── NOVO REGISTO ──
 function openNovoModal(){ document.getElementById('ov-novo').classList.remove('hidden'); }
 
 async function saveNovo(){
-  const org=document.getElementById('n-org').value.trim();
-  if(!org){toast('Organização é obrigatória.','err');return;}
-  const btn=document.getElementById('btn-save-novo');
-  btn.disabled=true; btn.textContent='A guardar…';
-
-  const payload={
+  const org = document.getElementById('n-org').value.trim();
+  if(!org){ toast('Organização é obrigatória.', 'err'); return; }
+  const btn = document.getElementById('btn-save-novo');
+  btn.disabled = true; btn.textContent = 'A guardar…';
+  const {data, error} = await sb.from('prospects').insert({
     seg: document.getElementById('n-seg').value,
     sc:  document.getElementById('n-sc').value,
-    org, tipo: document.getElementById('n-tipo').value.trim(),
+    org, tipo:    document.getElementById('n-tipo').value.trim(),
     domain:   document.getElementById('n-domain').value.trim(),
     decisor:  document.getElementById('n-decisor').value.trim(),
     cargo:    document.getElementById('n-cargo').value.trim(),
@@ -534,55 +490,50 @@ async function saveNovo(){
     tel:      document.getElementById('n-tel').value.trim(),
     nota:     document.getElementById('n-notas').value.trim(),
     created_by: currentUser?.id
-  };
-
-  const {data,error}=await sb.from('prospects').insert(payload).select().single();
-  btn.disabled=false; btn.textContent='Guardar';
-  if(error){toast('Erro: '+error.message,'err');return;}
+  }).select().single();
+  btn.disabled = false; btn.textContent = 'Guardar';
+  if(error){ toast('Erro: ' + error.message, 'err'); return; }
   prospects.push(data);
   closeOv('ov-novo');
-  ['n-org','n-tipo','n-domain','n-decisor','n-cargo','n-email','n-tel','n-notas'].forEach(id=>document.getElementById(id).value='');
+  ['n-org','n-tipo','n-domain','n-decisor','n-cargo','n-email','n-tel','n-notas'].forEach(id => document.getElementById(id).value = '');
   render();
   toast(`${org} adicionado com sucesso.`);
 }
 
-// ══════════════════════════════════════════
-//  ENRICH MODAL
-// ══════════════════════════════════════════
+// ── ENRICH MODAL ──
 function openEnrich(id, source){
-  currentEnrichId=id;
-  pendingContacts={};
-  const rec=prospects.find(p=>p.id===id);
-  if(!rec)return;
-  document.getElementById('enrich-title').innerHTML=`Enriquecimento — <em>${esc(rec.org)}</em>`;
+  currentEnrichId = id;
+  pendingContacts = {};
+  const rec = prospects.find(p => p.id === id);
+  if(!rec) return;
+  document.getElementById('enrich-title').innerHTML = `Enriquecimento — <em>${esc(rec.org)}</em>`;
   buildEnrichBody(rec);
   document.getElementById('ov-enrich').classList.remove('hidden');
   fetchSource(rec, source);
 }
 
 function buildEnrichBody(rec){
-  const cts=contactsMap[rec.id]||[];
-  const assocHtml=cts.length>0?`
-    <div class="assoc-section">
+  const cts = contactsMap[rec.id] || [];
+  const assocHtml = cts.length > 0 ? `
+    <div style="margin-bottom:.875rem;">
       <div class="assoc-label">Contactos já associados</div>
-      ${cts.map(c=>`
-        <div class="contact-card" style="opacity:.75;">
-          <div class="cc-info">
-            <div class="cc-name">${esc(c.name||'—')}</div>
-            <div class="cc-cargo">${esc(c.title||'')}</div>
-            <div class="cc-contact">
-              ${c.email?`<span>✉ ${esc(c.email)}</span>`:''}
-              ${c.phone?`<span>☏ ${esc(c.phone)}</span>`:''}
-              <span class="cc-src src-${c.source}">${c.source}</span>
-            </div>
+      ${cts.map(c => `<div class="contact-card" style="opacity:.75;">
+        <div class="cc-info">
+          <div class="cc-name">${esc(c.name||'—')}</div>
+          <div class="cc-cargo">${esc(c.title||'')}</div>
+          <div class="cc-contact">
+            ${c.email ? `<span>✉ ${esc(c.email)}</span>` : ''}
+            ${c.phone ? `<span>☏ ${esc(c.phone)}</span>` : ''}
+            <span class="cc-src src-${c.source}">${c.source}</span>
           </div>
-        </div>`).join('')}
+        </div>
+      </div>`).join('')}
       <hr class="section-hr">
-    </div>`:'' ;
+    </div>` : '';
 
-  const sources=['apollo','clay','vibe'];
-  const labels={apollo:'Apollo.io',clay:'Clay',vibe:'Vibe Prospecting'};
-  document.getElementById('enrich-body').innerHTML=assocHtml+sources.map(src=>`
+  const sources  = ['apollo','clay','vibe'];
+  const labels   = {apollo:'Apollo.io', clay:'Clay', vibe:'Vibe Prospecting'};
+  document.getElementById('enrich-body').innerHTML = assocHtml + sources.map((src, i) => `
     <div class="source-block">
       <div class="source-header sh-${src}">
         <span class="source-dot sd-${src}"></span>
@@ -592,55 +543,63 @@ function buildEnrichBody(rec){
       </div>
       <div id="res-${src}"></div>
     </div>
-    ${src!=='vibe'?'<hr class="section-hr">':''}`).join('');
+    ${i < 2 ? '<hr class="section-hr">' : ''}`).join('');
 }
 
 async function fetchSource(rec, source){
-  const stEl=document.getElementById(`st-${source}`);
-  const resEl=document.getElementById(`res-${source}`);
-  if(!stEl||!resEl)return;
-  stEl.textContent='A pesquisar…';
-  resEl.innerHTML=`<div class="enrich-loading"><span class="spin"></span>A pesquisar em ${source}…</div>`;
-  try{
-    let contacts=[];
-    if(source==='apollo') contacts=await queryApollo(rec);
-    else if(source==='clay') contacts=await queryClay(rec);
-    else if(source==='vibe') contacts=await queryVibe(rec);
-    pendingContacts[source]=contacts;
+  const stEl  = document.getElementById(`st-${source}`);
+  const resEl = document.getElementById(`res-${source}`);
+  if(!stEl || !resEl) return;
+  stEl.textContent = 'A pesquisar…';
+  resEl.innerHTML  = `<div class="enrich-loading"><span class="spin"></span>A pesquisar…</div>`;
+  try {
+    const res = await fetch('/api/enrich', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({org: rec.org, domain: rec.domain || '', source})
+    });
+    const data = await res.json();
+    if(data.error && !data.contacts?.length){
+      resEl.innerHTML = `<div class="no-res">Erro: ${esc(data.error)}</div>`;
+      stEl.textContent = 'Erro';
+      return;
+    }
+    const contacts = data.contacts || [];
+    pendingContacts[source] = contacts;
     renderResults(source, contacts);
-    stEl.textContent=contacts.length>0?`${contacts.length} encontrado${contacts.length>1?'s':''}`:'Sem resultados';
-  }catch(e){
-    resEl.innerHTML=`<div class="no-res">Erro: ${esc(e.message)}</div>`;
-    stEl.textContent='Erro';
+    stEl.textContent = contacts.length > 0 ? `${contacts.length} encontrado${contacts.length>1?'s':''}` : 'Sem resultados';
+  } catch(e) {
+    resEl.innerHTML = `<div class="no-res">Erro: ${esc(e.message)}</div>`;
+    stEl.textContent = 'Erro';
   }
 }
 
 function renderResults(source, contacts){
-  const el=document.getElementById(`res-${source}`);
-  if(!el)return;
-  if(!contacts||contacts.length===0){el.innerHTML='<div class="no-res">Nenhum contacto encontrado.</div>';return;}
-  el.innerHTML=contacts.map((c,i)=>`
+  const el = document.getElementById(`res-${source}`);
+  if(!el) return;
+  if(!contacts || contacts.length === 0){ el.innerHTML = '<div class="no-res">Nenhum contacto encontrado.</div>'; return; }
+  el.innerHTML = contacts.map((c, i) => `
     <div class="contact-card">
-      <input type="checkbox" class="cc-check" id="ck-${source}-${i}" data-source="${source}" data-idx="${i}">
+      <input type="checkbox" class="cc-check" id="ck-${source}-${i}">
       <label for="ck-${source}-${i}" class="cc-info" style="cursor:pointer;">
         <div class="cc-name">${esc(c.name||'—')}</div>
         <div class="cc-cargo">${esc(c.title||'')}</div>
         <div class="cc-contact">
-          ${c.email?`<span>✉ ${esc(c.email)}</span>`:''}
-          ${c.phone?`<span>☏ ${esc(c.phone)}</span>`:''}
-          ${c.linkedin?`<span>🔗 LinkedIn</span>`:''}
+          ${c.email    ? `<span>✉ ${esc(c.email)}</span>`    : ''}
+          ${c.phone    ? `<span>☏ ${esc(c.phone)}</span>`    : ''}
+          ${c.linkedin ? `<span>🔗 LinkedIn</span>`           : ''}
         </div>
       </label>
     </div>`).join('');
 }
 
 async function associateSelected(){
-  const rec=prospects.find(p=>p.id===currentEnrichId);
-  if(!rec)return;
-  const toInsert=[];
-  Object.entries(pendingContacts).forEach(([source,contacts])=>{
-    (contacts||[]).forEach((c,i)=>{
-      const cb=document.getElementById(`ck-${source}-${i}`);
+  const rec = prospects.find(p => p.id === currentEnrichId);
+  if(!rec) return;
+  const toInsert = [];
+  Object.entries(pendingContacts).forEach(([source, contacts]) => {
+    (contacts||[]).forEach((c, i) => {
+      const cb = document.getElementById(`ck-${source}-${i}`);
       if(cb?.checked) toInsert.push({
         prospect_id: rec.id, source,
         name: c.name||'', title: c.title||'',
@@ -649,104 +608,33 @@ async function associateSelected(){
       });
     });
   });
-  if(toInsert.length===0){toast('Nenhum contacto selecionado.','err');return;}
-  const {data,error}=await sb.from('prospect_contacts').insert(toInsert).select();
-  if(error){toast('Erro: '+error.message,'err');return;}
-  if(!contactsMap[rec.id]) contactsMap[rec.id]=[];
+  if(toInsert.length === 0){ toast('Nenhum contacto selecionado.', 'err'); return; }
+  const {data, error} = await sb.from('prospect_contacts').insert(toInsert).select();
+  if(error){ toast('Erro: ' + error.message, 'err'); return; }
+  if(!contactsMap[rec.id]) contactsMap[rec.id] = [];
   contactsMap[rec.id].push(...(data||[]));
   closeOv('ov-enrich');
   render();
   toast(`${toInsert.length} contacto${toInsert.length>1?'s':''} associado${toInsert.length>1?'s':''} a ${rec.org}.`);
 }
 
-// ══════════════════════════════════════════
-//  API CALLS VIA ANTHROPIC MCP
-// ══════════════════════════════════════════
-async function callMCP(mcp_server_url, mcp_server_name, prompt){
-  const res=await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:1000,
-      mcp_servers:[{type:'url',url:mcp_server_url,name:mcp_server_name}],
-      system:'You are a contact research assistant. Use the available MCP tools to search for business contacts. Return ONLY a valid JSON array, no markdown, no explanation.',
-      messages:[{role:'user',content:prompt}]
-    })
-  });
-  if(!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data=await res.json();
-  if(data.error) throw new Error(data.error.message||'API error');
-  const text=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
-  return parseJSON(text);
-}
+// ── UTILS ──
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function closeOv(id){ document.getElementById(id).classList.add('hidden'); }
 
-async function queryApollo(rec){
-  return callMCP(
-    'https://mcp.apollo.io/mcp','apollo',
-    `Search Apollo.io for contacts at company "${rec.org}" with domain "${rec.domain||''}". Return up to 8 senior contacts (C-suite, Partners, Directors) as a JSON array with fields: name, title, email, phone, linkedin.`
-  );
-}
-
-async function queryClay(rec){
-  return callMCP(
-    'https://api.clay.com/v3/mcp','clay',
-    `Find contacts at "${rec.org}" (domain: "${rec.domain||''}") using Clay. Return up to 8 decision-makers as a JSON array with fields: name, title, email, phone, linkedin.`
-  );
-}
-
-async function queryVibe(rec){
-  return callMCP(
-    'https://vibeprospecting.explorium.ai/mcp','vibe',
-    `Search Vibe Prospecting for contacts at "${rec.org}" (domain: "${rec.domain||''}"). Return up to 8 senior contacts as a JSON array with fields: name, title, email, phone, linkedin.`
-  );
-}
-
-function parseJSON(text){
-  try{
-    const clean=text.replace(/```json|```/g,'').trim();
-    const match=clean.match(/\[[\s\S]*\]/);
-    if(match){
-      return JSON.parse(match[0]).map(c=>({
-        name:    c.name||c.full_name||'',
-        title:   c.title||c.job_title||c.position||'',
-        email:   c.email||c.email_address||'',
-        phone:   c.phone||c.phone_number||c.direct_phone||'',
-        linkedin:c.linkedin_url||c.linkedin||''
-      })).filter(c=>c.name);
-    }
-  }catch(e){console.warn('parse',e);}
-  return [];
-}
-
-// ══════════════════════════════════════════
-//  UTILS
-// ══════════════════════════════════════════
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function closeOv(id){document.getElementById(id).classList.add('hidden');}
-function overlayClick(e,id){if(e.target.id===id)closeOv(id);}
-
-function toast(msg,type){
-  const el=document.getElementById('toast');
-  el.textContent=msg;
-  el.style.borderLeftColor=type==='err'?'#e74c3c':'var(--gold3)';
+function toast(msg, type){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.borderLeftColor = type==='err' ? '#e74c3c' : 'var(--gold3)';
   el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),3000);
+  setTimeout(() => el.classList.remove('show'), 3000);
 }
 
-// close on overlay click
-['ov-novo','ov-enrich'].forEach(id=>{
-  document.getElementById(id).addEventListener('mousedown',e=>{
-    if(e.target.id===id) closeOv(id);
-  });
+['ov-novo','ov-enrich'].forEach(id => {
+  document.getElementById(id).addEventListener('mousedown', e => { if(e.target.id === id) closeOv(id); });
 });
+document.getElementById('l-pass').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
 
-// enter no login
-document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
-
-// ══════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════
 checkSession();
 </script>
 </body>
