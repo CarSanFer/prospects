@@ -9,12 +9,6 @@ function json(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: CORS });
 }
 
-const MCP_SERVERS = {
-  apollo: 'https://mcp.apollo.io/mcp',
-  clay:   'https://api.clay.com/v3/mcp',
-  vibe:   'https://vibeprospecting.explorium.ai/mcp'
-};
-
 export const config = { runtime: 'edge' };
 
 export default async function handler(req) {
@@ -26,17 +20,27 @@ export default async function handler(req) {
   catch { return json({ error: 'Invalid JSON', contacts: [] }, 400); }
 
   const { org, domain, source } = body || {};
-  if (!org || !source || !MCP_SERVERS[source]) {
-    return json({ error: 'Missing or invalid parameters', contacts: [] }, 400);
-  }
+  if (!org || !source) return json({ error: 'Missing parameters', contacts: [] }, 400);
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return json({ error: 'ANTHROPIC_API_KEY not set', contacts: [] }, 500);
 
-  const prompt = `Search for contacts at "${org}"${domain ? ` (domain: ${domain})` : ''}.
-Return up to 8 senior decision-makers as a JSON array only.
-Fields: name, title, email, phone, linkedin.
-No markdown. No explanation. Only the array.`;
+  const sourceLabel = { apollo: 'Apollo.io', clay: 'Clay', vibe: 'Vibe Prospecting' }[source] || source;
+
+  const prompt = `Find senior decision-makers and contacts at the company "${org}"${domain ? ` (website: ${domain})` : ''}.
+
+Search the web for their LinkedIn profiles, company website team pages, news articles, and directories.
+
+Return a JSON array of up to 8 contacts. Each object must have:
+- name (full name)
+- title (job title)
+- email (if found, otherwise empty string)
+- phone (if found, otherwise empty string)
+- linkedin (LinkedIn URL if found, otherwise empty string)
+
+Focus on: CEO, Managing Partner, Director, Partner, VP, Country Manager, or equivalent senior roles.
+
+Reply with ONLY the JSON array. No markdown. No explanation. No text before or after the array.`;
 
   try {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
@@ -44,22 +48,25 @@ No markdown. No explanation. Only the array.`;
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'mcp-client-2025-04-04'
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        mcp_servers: [{ type: 'url', url: MCP_SERVERS[source], name: source }],
-        system: 'You are a contact finder. Use MCP tools to find contacts. Reply ONLY with a JSON array, nothing else.',
+        max_tokens: 2000,
+        tools: [{
+          type: 'web_search_20250305',
+          name: 'web_search'
+        }],
+        system: `You are a B2B contact researcher. Search the web to find real people and their contact details at companies.
+Always return ONLY a valid JSON array as your final response — no markdown, no preamble, just the array.
+If you cannot find contacts, return an empty array: []`,
         messages: [{ role: 'user', content: prompt }]
       })
     });
 
-    // Check if response is ok
     if (!r.ok) {
       const errText = await r.text();
-      return json({ error: `Anthropic API error ${r.status}: ${errText.slice(0, 200)}`, contacts: [] });
+      return json({ error: `Anthropic API error ${r.status}: ${errText.slice(0, 300)}`, contacts: [] });
     }
 
     const data = await r.json();
@@ -73,7 +80,8 @@ No markdown. No explanation. Only the array.`;
       .map(b => b.text)
       .join('');
 
-    return json({ contacts: parseContacts(text), raw: text.slice(0, 500) });
+    const contacts = parseContacts(text);
+    return json({ contacts, source: sourceLabel });
 
   } catch (err) {
     return json({ error: err.message, contacts: [] });
@@ -85,14 +93,17 @@ function parseContacts(text) {
     const clean = text.replace(/```json|```/g, '').trim();
     const match = clean.match(/\[[\s\S]*\]/);
     if (match) {
-      return JSON.parse(match[0]).map(c => ({
-        name:     c.name     || c.full_name       || '',
-        title:    c.title    || c.job_title        || c.position || '',
-        email:    c.email    || c.email_address    || '',
-        phone:    c.phone    || c.phone_number     || c.direct_phone || '',
-        linkedin: c.linkedin || c.linkedin_url     || ''
-      })).filter(c => c.name);
+      const arr = JSON.parse(match[0]);
+      return arr.map(c => ({
+        name:     String(c.name     || c.full_name       || '').trim(),
+        title:    String(c.title    || c.job_title        || c.position || '').trim(),
+        email:    String(c.email    || c.email_address    || '').trim(),
+        phone:    String(c.phone    || c.phone_number     || c.direct_phone || '').trim(),
+        linkedin: String(c.linkedin || c.linkedin_url     || '').trim()
+      })).filter(c => c.name.length > 0);
     }
-  } catch (e) { console.error('Parse error:', e, text); }
+  } catch (e) {
+    console.error('Parse error:', e.message, '| text:', text.slice(0, 200));
+  }
   return [];
 }
